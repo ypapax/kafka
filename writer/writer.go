@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/segmentio/kafka-go"
+	"github.com/tjarratt/babble"
 	"log"
 	"time"
 )
@@ -21,19 +23,20 @@ func producer() {
 	if err != nil {
 		log.Fatal("failed to dial leader:", err)
 	}
-
+	babbler := babble.NewBabbler()
+	babbler.Separator = " "
 	//conn.SetWriteDeadline(time.Now().Add(10*time.Second))
-	messages := []string{"one!", "two!", "three!"}
+	var i int
 	for {
-		for _, m := range messages {
-			_, err = conn.WriteMessages(
-				kafka.Message{Value: []byte(m)},
-			)
-			if err != nil {
-				log.Fatal("failed to write messages:", err)
-			}
-			log.Printf("message is sent: %+v", m)
+		i++
+		m := fmt.Sprintf("%+v - %+v ", i, babbler.Babble())
+		_, err = conn.WriteMessages(
+			kafka.Message{Value: []byte(m)},
+		)
+		if err != nil {
+			log.Fatal("failed to write messages:", err)
 		}
+		log.Printf("message is sent: %+v", m)
 		time.Sleep(time.Second)
 	}
 

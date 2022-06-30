@@ -29,14 +29,17 @@ func consumer() {
 	batch := conn.ReadBatch(10e3, 1e6) // fetch 10KB min, 1MB max
 	log.Println("listening...")
 	b := make([]byte, 10e3) // 10KB max per message
+	var i int
 	for {
-		time.Sleep(time.Second)
+		time.Sleep(1*time.Millisecond)
 		n, errR := batch.Read(b)
 		if errR != nil {
 			log.Printf("err: %+v", errR)
+			time.Sleep(time.Second)
 			continue
 		}
-		log.Println("got message: ")
+		i++
+		log.Printf("got message: %+v", i)
 		log.Println(string(b[:n]))
 
 	}
