@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"github.com/segmentio/kafka-go"
 	"log"
 	"time"
-	"github.com/segmentio/kafka-go"
 )
 
 func main() {
@@ -30,14 +30,15 @@ func consumer() {
 	log.Println("listening...")
 	b := make([]byte, 10e3) // 10KB max per message
 	for {
+		time.Sleep(time.Second)
 		n, errR := batch.Read(b)
 		if errR != nil {
 			log.Printf("err: %+v", errR)
-			//break
+			continue
 		}
 		log.Println("got message: ")
 		log.Println(string(b[:n]))
-		time.Sleep(time.Second)
+
 	}
 
 	if err := batch.Close(); err != nil {
