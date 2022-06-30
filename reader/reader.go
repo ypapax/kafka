@@ -22,9 +22,9 @@ func consumer() {
 		log.Fatal("failed to dial leader:", err)
 	}
 	log.Println("dialed")
-	if errS := conn.SetReadDeadline(time.Now().Add(10*time.Second)); errS != nil {
-		log.Fatal(errS)
-	}
+	//if errS := conn.SetReadDeadline(time.Now().Add(10*time.Second)); errS != nil {
+	//	log.Fatal(errS)
+	//}
 	log.Println("set deadline")
 	batch := conn.ReadBatch(10e3, 1e6) // fetch 10KB min, 1MB max
 	log.Println("listening...")
